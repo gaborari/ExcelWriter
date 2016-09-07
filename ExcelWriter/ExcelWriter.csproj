@@ -44,7 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\EWCell.cs" />
+    <Compile Include="Entities\EWMergedCell.cs" />
     <Compile Include="ExcelWriter.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
