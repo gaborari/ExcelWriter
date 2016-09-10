@@ -34,6 +34,7 @@ namespace ExcelWriter.Entities
             {
                 LastRowIndex = row;
                 var cell = new EWCell(row, col, value.ToString());
+                cell.sheetIndex = this.Index;
                 CellAddedEventArgs eventarg = new CellAddedEventArgs();
                 eventarg.SheetIndex = this.Index;
                 eventarg.Cell = cell;
