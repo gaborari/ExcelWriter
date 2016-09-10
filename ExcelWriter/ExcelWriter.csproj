@@ -46,8 +46,14 @@
   <ItemGroup>
     <Compile Include="Entities\EWCell.cs" />
     <Compile Include="Entities\EWMergedCell.cs" />
+    <Compile Include="Entities\EWSheet.cs" />
+    <Compile Include="Entities\EWStyle.cs" />
     <Compile Include="ExcelWriter.cs" />
     <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Parallelism\EWConsumer.cs" />
+    <Compile Include="Parallelism\EWProcessingFinished.cs" />
+    <Compile Include="Parallelism\EWProducer.cs" />
+    <Compile Include="Parallelism\EWThreadKiller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
