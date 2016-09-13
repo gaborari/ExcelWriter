@@ -15,191 +15,124 @@ namespace ExcelWriter.Parallelism
 {
     internal class EWConsumer
     {
-        private ConcurrentQueue<EWCell> _cellQueue;
-        private object _lockObj;
-        private string fileName;
-        private EWThreadKiller threadKiller;
-        private EWProcessingFinished finished;
-        private List<EWSheet> _sheet;
+        private string _fileName { get; set; }
 
-        int sheetIndex;
-        int rowIndex = 1;
-        int colIndex;
-
-
-        public EWConsumer(List<EWSheet> sheets, ConcurrentQueue<EWCell> _cellQueue, object _lockObj, string fileName, EWThreadKiller threadKiller, EWProcessingFinished finished)
+        public EWConsumer(string fileName)
         {
-            this._cellQueue = _cellQueue;
-            this._lockObj = _lockObj;
-            this.fileName = fileName;
-            this.threadKiller = threadKiller;
-            this.finished = finished;
-            this._sheet = sheets;
+            _fileName = fileName;
         }
 
         public void consume()
         {
-            EWCell item;
-            
-            using (SpreadsheetDocument spreadSheet = SpreadsheetDocument.Create(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName), SpreadsheetDocumentType.Workbook))
+            using (SpreadsheetDocument spreadSheet = SpreadsheetDocument.Create(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _fileName), SpreadsheetDocumentType.Workbook))
             {
-                spreadSheet.AddWorkbookPart();
-                spreadSheet.WorkbookPart.Workbook = new Workbook();     // create the worksheet
-                // create the worksheet to workbook relation
-                spreadSheet.WorkbookPart.Workbook.AppendChild(new Sheets());
+                List<OpenXmlAttribute> attributeList = new List<OpenXmlAttribute>();
+                OpenXmlWriter writer;
 
-               
+                spreadSheet.AddWorkbookPart();
                 //Init base style
                 WorkbookStylesPart stylesPart = spreadSheet.WorkbookPart.AddNewPart<WorkbookStylesPart>();
                 stylesPart.Stylesheet = EWStyle.GetBaseStyle();
                 stylesPart.Stylesheet.Save();
 
-                foreach (var currSheet in _sheet)
+                var currentSheetIndex = 0;
+                while (currentSheetIndex < ExcelWriter.Sheets.Count())
                 {
+                    var sheet = ExcelWriter.Sheets.ElementAt(currentSheetIndex);
 
-                    #region init stuff
-                    WorkbookPart workbookPart = spreadSheet.WorkbookPart;
-                    ////
+                    WorksheetPart worksheetPart = spreadSheet.WorkbookPart.AddNewPart<WorksheetPart>();
 
-                    // Add a blank WorksheetPart.
-                    WorksheetPart newWorksheetPart = workbookPart.AddNewPart<WorksheetPart>();
-                    newWorksheetPart.Worksheet = new Worksheet(new SheetData());
-
-                    Sheets sheets = workbookPart.Workbook.GetFirstChild<Sheets>();
-                    string relationshipId = workbookPart.GetIdOfPart(newWorksheetPart);
-
-                    // Get a unique ID for the new worksheet.
-                    uint sheetId = 1;
-                    if (sheets.Elements<Sheet>().Count() > 0)
+                    writer = OpenXmlWriter.Create(worksheetPart);
+                    writer.WriteStartElement(new Worksheet());
                     {
-                        sheetId = sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1;
-                    }
+                        writer.WriteStartElement(new SheetData());
 
-                    // Give the new worksheet a name.
-                    string sheetName = currSheet.Name;
+                        int rowIndex = 0;
+                        writer.WriteStartElement(new Row(), attributeList);
+                        EWCell item;
 
-                    // Append the new worksheet and associate it with the workbook.
-                    Sheet sheet = new Sheet() { Id = relationshipId, SheetId = sheetId, Name = sheetName };
-                    sheets.Append(sheet);
-
-                    newWorksheetPart.Worksheet.Save();
-
-                    //
-                    ////////
-
-
-                    string origninalSheetId = workbookPart.GetIdOfPart(newWorksheetPart);
-
-
-                    WorksheetPart replacementPart = workbookPart.AddNewPart<WorksheetPart>();
-                    string replacementPartId = workbookPart.GetIdOfPart(replacementPart);
-
-                    OpenXmlReader reader = OpenXmlReader.Create(newWorksheetPart);
-                    OpenXmlWriter writer = OpenXmlWriter.Create(replacementPart);
-                    
-                    Row row = new Row();
-                    Cell cell = new Cell() { CellValue = new CellValue("hellowrold") };
-
-                    Worksheet worksheet = newWorksheetPart.Worksheet; 
-                    #endregion
-                    while (reader.Read())
-                    {
-                        if (reader.ElementType == typeof(SheetData))
+                        while (ExcelWriter.Finished == false)
                         {
-                            if (reader.IsEndElement)
+                            if (!ExcelWriter.CellQueue.IsEmpty)
                             {
-                                //writer.WriteMergedCells(currSheet._mergedCells);
-                                
-                                //write merged cells
-
-                                continue;
-                            }
-                            writer.WriteStartElement(new SheetData());
-                            //write first row
-                            writer.WriteStartElement(row);
-
-                            while (true)
-                            {
-                                lock (_lockObj)
+                                ExcelWriter.CellQueue.TryDequeue(out item);
+                                if (item.sheetIndex != currentSheetIndex)
                                 {
-                                    if (!_cellQueue.IsEmpty)
-                                    {
-                                        _cellQueue.TryDequeue(out item);
-                                        
-                                        //Row and col process logic
-
-                                        //staying in the current row
-                                        if (item.rowIndex == rowIndex)
-                                        {
-                                            //write the cell
-                                            cell.CellValue.Text = item.value;
-                                            cell.StyleIndex = 0;
-                                            writer.WriteElement(cell);
-
-                                        }
-                                        //create new row
-                                        else
-                                        {
-                                            //Close the previous row
-                                            writer.WriteEndElement();
-
-                                            //write new row
-                                            writer.WriteStartElement(row);
-
-                                            //set to the actual row
-                                            rowIndex = item.rowIndex;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (this.threadKiller.Killed == true)
-                                        {
-                                            break;
-                                        }
-
-                                        Monitor.Wait(_lockObj);
-                                        continue;
-                                    }
+                                    break;
                                 }
+
+                                if (item.rowIndex == rowIndex)
+                                {
+                                    attributeList = new List<OpenXmlAttribute>();
+                                    // this is the data type ("t"), with CellValues.String ("str")
+                                    attributeList.Add(new OpenXmlAttribute("t", null, "str"));
+                                    attributeList.Add(new OpenXmlAttribute("s", null, "1"));
+                                    
+                                    writer.WriteStartElement(new Cell(), attributeList);
+
+                                    writer.WriteElement(new CellValue(item.value));
+
+                                    // this is for Cell
+                                    writer.WriteEndElement();
+                                }
+                                else
+                                {
+                                    // this is for Row
+                                    writer.WriteEndElement();
+                                    writer.WriteStartElement(new Row(), attributeList);
+                                    rowIndex = item.rowIndex;
+                                }
+
                             }
-                            //close last row
-                            writer.WriteEndElement();
-                            //close sheet
-                            writer.WriteEndElement();
-                        }
-                        #region closing stuff
-                        else
-                        {
-                            if (reader.IsStartElement)
+                            else
                             {
-                                writer.WriteStartElement(reader);
-                            }
-                            else if (reader.IsEndElement)
-                            {
+                                ExcelWriter.Finished = true;
                                 writer.WriteEndElement();
+
+                                //TODO Write merged cells
                             }
                         }
+
+                        // this is for SheetData
+                        writer.WriteEndElement();
+                    }
+                    // this is for Worksheet
+                    writer.WriteEndElement();
+                    writer.Close();
+                    currentSheetIndex++;
+                }
+
+               
+
+                writer = OpenXmlWriter.Create(spreadSheet.WorkbookPart);
+                writer.WriteStartElement(new Workbook());
+                {
+                    writer.WriteStartElement(new Sheets());
+
+                    currentSheetIndex = 0;
+                    foreach (var sheet in ExcelWriter.Sheets)
+                    {
+                        writer.WriteElement(new Sheet()
+                        {
+                            Name = sheet.Name,
+                            SheetId = Convert.ToUInt32(currentSheetIndex + 1),
+                            Id = spreadSheet.WorkbookPart.GetIdOfPart(spreadSheet.WorkbookPart.WorksheetParts.ElementAt(currentSheetIndex))
+                        });
+                        currentSheetIndex++;
                     }
 
-                    reader.Close();
-                    writer.Close();
-
-                    Sheet sheeet = workbookPart.Workbook.Descendants<Sheet>().Where(s => s.Id.Value.Equals(origninalSheetId)).First();
-                    sheeet.Id.Value = replacementPartId;
-                    workbookPart.DeletePart(newWorksheetPart); 
-                        #endregion
+                    // this is for Sheets
+                    writer.WriteEndElement();
                 }
+                // this is for Workbook
+                writer.WriteEndElement();
 
-                lock (_lockObj)
-                {
-                    finished.EWFinished = true;
-                }
+                writer.Close();
 
-                //
-                spreadSheet.WorkbookPart.Workbook.Save();
+                spreadSheet.Close();
             }
 
-            
+
         }
     }
 }

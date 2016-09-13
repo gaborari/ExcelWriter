@@ -7,12 +7,12 @@
         internal int columnIndex;
         internal string value;
 
-        public EWCell(int row, int col, string stringValue)
+        public EWCell(int rowIndex, int columnIndex, int sheetIndex, string value)
         {
-            sheetIndex = 0;
-            rowIndex = row;
-            columnIndex = col;
-            value = stringValue;
+            this.rowIndex = rowIndex;
+            this.columnIndex = columnIndex;
+            this.value = value;
+            this.sheetIndex = sheetIndex;
         }
     }
 }

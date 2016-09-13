@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System.Diagnostics;
 
 namespace ExcelWriter.Tests
 {
@@ -14,20 +15,29 @@ namespace ExcelWriter.Tests
         public void MainTest()
         {
             var excelWriter = new ExcelWriter();
-            var elsoSheet = excelWriter.AddSheet("firstsheet");
+            
 
             int rowIndex = 1;
             int colIndex = 1;
-            foreach (var row in rows)
+            for (int i = 0; i < 5; i++)
             {
-                foreach (var col in row.Columns)
+                var sheet = excelWriter.AddSheet("sheet" + i);
+
+                foreach (var row in rows)
                 {
-                    elsoSheet.AddCell(rowIndex, colIndex++, "testvalue");
+                    foreach (var col in row.Columns)
+                    {
+                        sheet.AddCell(rowIndex, colIndex++, "testvalue");
+                    }
+                    rowIndex++;
                 }
-                rowIndex++;
+
             }
+            Stopwatch sp = new Stopwatch(); sp.Start();
 
             excelWriter.Generate();
+
+            sp.Stop();
         }
 
     }
