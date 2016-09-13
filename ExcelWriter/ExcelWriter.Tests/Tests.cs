@@ -46,7 +46,7 @@ namespace ExcelWriter.Tests
     {
         public static IEnumerable<TestRow> GetData() 
         {
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 yield return new TestRow { Columns = TestRow.GetColumns() } ;   
             }

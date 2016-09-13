@@ -28,7 +28,7 @@ namespace ExcelWriter
 
         /// <summary>
         /// While adding cells, this method is to necessary to be called. 
-        /// It counts the adding of cells and if the count reached the chunksize, it waits for processing cells.
+        /// It counts the adding of cells and if the count reached the chunksize, it waits for the count processed cells to reach the chunksize.
         /// It helps to avoid memory leaks - if chunksize set to 20000000 the maximum used megabytes of memory will be around 400.
         /// </summary>
         internal static void GCCollectIfNecessary()

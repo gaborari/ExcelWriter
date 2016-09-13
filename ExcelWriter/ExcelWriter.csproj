@@ -49,6 +49,12 @@
     <Compile Include="Entities\EWMergedCell.cs" />
     <Compile Include="Entities\EWSheet.cs" />
     <Compile Include="Entities\EWStyle.cs" />
+    <Compile Include="Entities\EWStyle.Fill.cs">
+      <DependentUpon>EWStyle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EWStyle.Border.cs">
+      <DependentUpon>EWStyle.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExcelWriter.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Parallelism\EWConsumer.cs" />
@@ -57,6 +63,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\EWStyle.Font.cs">
+      <DependentUpon>EWStyle.cs</DependentUpon>
+    </Compile>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

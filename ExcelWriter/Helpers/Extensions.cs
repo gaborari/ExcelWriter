@@ -45,6 +45,11 @@ namespace ExcelWriter.Helpers
             return uint.Parse(match.Value);
         }
 
+        public static T As<T>(this EWPattern c) where T : struct
+        {
+            return (T)System.Enum.Parse(typeof(T), c.ToString(), false);
+        }
+
         /// <summary>
         /// Writes all merged cells after to the end of the xml document
         /// </summary>
