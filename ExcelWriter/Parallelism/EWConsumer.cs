@@ -16,7 +16,7 @@ namespace ExcelWriter.Parallelism
     internal class EWConsumer
     {
         private string _fileName { get; set; }
-
+       
         public EWConsumer(string fileName)
         {
             _fileName = fileName;
@@ -56,6 +56,8 @@ namespace ExcelWriter.Parallelism
                             if (!ExcelWriter.CellQueue.IsEmpty)
                             {
                                 ExcelWriter.CellQueue.TryDequeue(out item);
+                                ExcelWriter.RemoveCellCount++;
+
                                 if (item.sheetIndex != currentSheetIndex)
                                 {
                                     break;
@@ -67,7 +69,7 @@ namespace ExcelWriter.Parallelism
                                     // this is the data type ("t"), with CellValues.String ("str")
                                     attributeList.Add(new OpenXmlAttribute("t", null, "str"));
                                     attributeList.Add(new OpenXmlAttribute("s", null, "1"));
-                                    
+
                                     writer.WriteStartElement(new Cell(), attributeList);
 
                                     writer.WriteElement(new CellValue(item.value));
@@ -86,9 +88,12 @@ namespace ExcelWriter.Parallelism
                             }
                             else
                             {
-                                ExcelWriter.Finished = true;
-                                writer.WriteEndElement();
-
+                                if (ExcelWriter.AddingCellsInProgress == false)
+                                {
+                                    ExcelWriter.Finished = true;
+                                    writer.WriteEndElement();
+                                    GC.Collect(); 
+                                }
                                 //TODO Write merged cells
                             }
                         }
@@ -101,8 +106,6 @@ namespace ExcelWriter.Parallelism
                     writer.Close();
                     currentSheetIndex++;
                 }
-
-               
 
                 writer = OpenXmlWriter.Create(spreadSheet.WorkbookPart);
                 writer.WriteStartElement(new Workbook());

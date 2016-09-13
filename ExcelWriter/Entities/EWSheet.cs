@@ -24,6 +24,7 @@ namespace ExcelWriter.Entities
             {
                 LastRowIndex = row;
                 ExcelWriter.CellQueue.Enqueue(new EWCell(row, col, this.Index, value.ToString()));
+                ExcelWriter.GCCollectIfNecessary();
             }
         }
     }

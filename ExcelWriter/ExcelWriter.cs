@@ -13,6 +13,47 @@ namespace ExcelWriter
 {
     public class ExcelWriter
     {
+        #region memory stuff
+        
+        private const long chunkSize = 20000000;
+
+        /// <summary>
+        /// Counter what increases while adding cells
+        /// </summary>
+        internal static long AddCellCount = 0;
+        /// <summary>
+        /// Counter what increases while processing cells
+        /// </summary>
+        internal static long RemoveCellCount = 0;
+
+        /// <summary>
+        /// While adding cells, this method is to necessary to be called. 
+        /// It counts the adding of cells and if the count reached the chunksize, it waits for processing cells.
+        /// It helps to avoid memory leaks - if chunksize set to 20000000 the maximum used megabytes of memory will be around 400.
+        /// </summary>
+        internal static void GCCollectIfNecessary()
+        {
+            if (++AddCellCount < chunkSize)
+            {
+                return;
+            }
+
+
+            if (AddCellCount == chunkSize && RemoveCellCount < chunkSize)
+            {
+                while (RemoveCellCount < chunkSize)
+                {
+                    Thread.Sleep(1);
+                }
+                GC.Collect();
+                AddCellCount = 0;
+                RemoveCellCount = 0;
+            }
+        }
+
+        #endregion
+
+
         public string Name { get; set; }
         public static List<EWSheet> Sheets = new List<EWSheet>();
 
@@ -29,6 +70,7 @@ namespace ExcelWriter
         Thread consumerThread;
         
         private const string _extension = "xlsx";
+        internal static bool AddingCellsInProgress = true;
 
         public ExcelWriter(string fileName = null)
         {
@@ -53,6 +95,8 @@ namespace ExcelWriter
 
         public void Generate()
         {
+            ExcelWriter.AddingCellsInProgress = false;
+
             //waiting for the consumer thread to finish processing
             while (consumerThread.IsAlive)
             {
