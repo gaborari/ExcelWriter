@@ -4,10 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ExcelWriter
 {
@@ -53,15 +50,10 @@ namespace ExcelWriter
 
         #endregion
 
-
         public string Name { get; set; }
         public static List<EWSheet> Sheets = new List<EWSheet>();
 
-        Object _lockObj = new object();
-        
         EWConsumer consumer;
-        EWThreadKiller threadKiller = new EWThreadKiller();
-        EWProcessingFinished finished = new EWProcessingFinished();
         private int _sheetIndex;
 
         internal static ConcurrentQueue<EWCell> CellQueue = new ConcurrentQueue<EWCell>();

@@ -3,13 +3,8 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using ExcelWriter.Entities;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ExcelWriter.Parallelism
 {
@@ -50,7 +45,7 @@ namespace ExcelWriter.Parallelism
                         int rowIndex = 0;
                         writer.WriteStartElement(new Row(), attributeList);
                         EWCell item;
-
+                        int colIndex = 1;
                         while (ExcelWriter.Finished == false)
                         {
                             if (!ExcelWriter.CellQueue.IsEmpty)
@@ -65,6 +60,16 @@ namespace ExcelWriter.Parallelism
 
                                 if (item.rowIndex == rowIndex)
                                 {
+                                    var gap = item.columnIndex - colIndex;
+                                    if (gap > 1)
+                                    {
+                                        for (int i = 0; i < gap - 1; i++)
+                                        {
+                                            writer.WriteStartElement(new Cell(), attributeList);
+                                            writer.WriteEndElement();
+                                            colIndex++;
+                                        }
+                                    }
                                     attributeList = new List<OpenXmlAttribute>();
                                     // this is the data type ("t"), with CellValues.String ("str")
                                     attributeList.Add(new OpenXmlAttribute("t", null, "str"));
@@ -76,11 +81,24 @@ namespace ExcelWriter.Parallelism
 
                                     // this is for Cell
                                     writer.WriteEndElement();
+                                    colIndex++;
                                 }
                                 else
                                 {
                                     // this is for Row
                                     writer.WriteEndElement();
+                                    colIndex = 1;
+                                    var gap = item.rowIndex - rowIndex;
+                                    //if there are gaps between rows
+                                    if (gap > 1)
+                                    {
+                                        for (int i = 0; i < gap - 1 ; i++)
+                                        {
+                                            writer.WriteStartElement(new Row(), attributeList);
+                                            writer.WriteEndElement();
+                                        }
+                                    }
+
                                     writer.WriteStartElement(new Row(), attributeList);
                                     rowIndex = item.rowIndex;
                                 }
