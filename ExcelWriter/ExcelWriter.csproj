@@ -58,6 +58,8 @@
     <Compile Include="ExcelWriter.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Parallelism\EWConsumer.cs" />
+    <Compile Include="Parallelism\EWProcessingFinished.cs" />
+    <Compile Include="Parallelism\EWThreadKiller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
