@@ -7,7 +7,7 @@ namespace ExcelWriter.Entities
     public class EWFill
     {
         Fill _oxFill;
-        public Fill OxFill
+        public Fill oxFill
         {
             get
             {

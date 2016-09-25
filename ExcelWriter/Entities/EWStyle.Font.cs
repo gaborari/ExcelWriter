@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 namespace ExcelWriter.Entities
 {
-    public class EWFont : Font
+    public class EWFont
     {
         internal Font _oxFont;
 

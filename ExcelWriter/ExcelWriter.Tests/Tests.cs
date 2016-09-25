@@ -27,7 +27,7 @@ namespace ExcelWriter.Tests
                 {
                     foreach (var col in row.Columns)
                     {
-                        sheet.AddCell(rowIndex, colIndex++, "testvalue");
+                        sheet.AddCell(rowIndex, colIndex++, "default", "testvalue");
                     }
                     rowIndex++;
                 }

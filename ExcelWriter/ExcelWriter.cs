@@ -1,4 +1,5 @@
-﻿using ExcelWriter.Entities;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using ExcelWriter.Entities;
 using ExcelWriter.Parallelism;
 using System;
 using System.Collections.Concurrent;
@@ -13,6 +14,8 @@ namespace ExcelWriter
 {
     public class ExcelWriter
     {
+        public static bool DisableMemoryRestriction = false;
+
         #region memory stuff
         
         private const long chunkSize = 20000000;
@@ -53,6 +56,15 @@ namespace ExcelWriter
 
         #endregion
 
+        #region Styles part
+
+        internal static Stylesheet StyleSheet { get; set; }
+        public void ApplyStyles(IEnumerable<EWStyle> styles)
+        {
+            StyleSheet = EWStyle.GetStyleSheet(styles);
+        }
+
+        #endregion
 
         public string Name { get; set; }
         public static List<EWSheet> Sheets = new List<EWSheet>();

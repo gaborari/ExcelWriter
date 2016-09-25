@@ -11,20 +11,76 @@ namespace ExcelWriter.Entities
     {
         public string Name;
         internal int Index { get; set; }
-        internal int LastRowIndex { get; set; }
-
-        public void AddCell(int row, int col, object value)
+        private int _lastRowIndex { get; set; }
+        private int _lastColIndex { get; set; }
+        public void AddCell(int row, int col, string styleSelector, object value)
         {
             //Only sequential writing is possible
-            if (row < LastRowIndex)
+            if (row < _lastRowIndex)
             {
                 return;
             }
-            else
+
+            if (col < _lastColIndex)
             {
-                LastRowIndex = row;
-                ExcelWriter.CellQueue.Enqueue(new EWCell(row, col, this.Index, value.ToString()));
-                ExcelWriter.GCCollectIfNecessary();
+                return;
+            }
+
+            string styleIndex = GetStyleIndex(styleSelector);
+
+            _lastRowIndex = row;
+            _lastColIndex = col;
+            ExcelWriter.CellQueue.Enqueue(new EWCell(row, col, this.Index, styleIndex, value.ToString()));
+
+            
+            if (!ExcelWriter.DisableMemoryRestriction)
+            {
+                ExcelWriter.GCCollectIfNecessary(); 
+            }
+        }
+
+        private string GetStyleIndex(string styleSelector)
+        {
+            return EWStyle.selectors[styleSelector];
+        }
+
+        private void AddEmptyRows(int currentRow)
+        {
+            if (_lastRowIndex == currentRow)
+            {
+                return;
+            }
+
+            var gap = currentRow - _lastRowIndex;
+            if (gap <= 1)
+            {
+                return;
+            }
+
+            gap--;
+            for (int i = 0; i < gap; i++)
+            {
+                
+            }
+        }
+
+        private void AddEmptyCols(int currentCol)
+        {
+            if (_lastColIndex == currentCol)
+            {
+                return;
+            }
+
+            var gap = currentCol - _lastColIndex;
+            if (gap <= 1)
+            {
+                return;
+            }
+
+            gap--;
+            for (int i = 0; i < gap; i++)
+            {
+
             }
         }
     }

@@ -32,7 +32,8 @@ namespace ExcelWriter.Parallelism
                 spreadSheet.AddWorkbookPart();
                 //Init base style
                 WorkbookStylesPart stylesPart = spreadSheet.WorkbookPart.AddNewPart<WorkbookStylesPart>();
-                stylesPart.Stylesheet = EWStyle.GetBaseStyle();
+                stylesPart.Stylesheet = ExcelWriter.StyleSheet;
+                //stylesPart.Stylesheet = EWStyle.GetBaseStyle();
                 stylesPart.Stylesheet.Save();
 
                 var currentSheetIndex = 0;
@@ -68,7 +69,7 @@ namespace ExcelWriter.Parallelism
                                     attributeList = new List<OpenXmlAttribute>();
                                     // this is the data type ("t"), with CellValues.String ("str")
                                     attributeList.Add(new OpenXmlAttribute("t", null, "str"));
-                                    attributeList.Add(new OpenXmlAttribute("s", null, "1"));
+                                    attributeList.Add(new OpenXmlAttribute("s", null, item.styleIndex));
 
                                     writer.WriteStartElement(new Cell(), attributeList);
 

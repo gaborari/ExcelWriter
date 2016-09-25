@@ -50,6 +50,11 @@ namespace ExcelWriter.Helpers
             return (T)System.Enum.Parse(typeof(T), c.ToString(), false);
         }
 
+        public static T As<T>(this Borderstyles? c) where T : struct
+        {
+            return (T)System.Enum.Parse(typeof(T), c.ToString(), false);
+        }
+
         /// <summary>
         /// Writes all merged cells after to the end of the xml document
         /// </summary>
