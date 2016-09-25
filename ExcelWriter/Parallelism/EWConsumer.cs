@@ -32,8 +32,7 @@ namespace ExcelWriter.Parallelism
                 spreadSheet.AddWorkbookPart();
                 //Init base style
                 WorkbookStylesPart stylesPart = spreadSheet.WorkbookPart.AddNewPart<WorkbookStylesPart>();
-                stylesPart.Stylesheet = ExcelWriter.StyleSheet;
-                //stylesPart.Stylesheet = EWStyle.GetBaseStyle();
+                stylesPart.Stylesheet = ExcelWriter.GetStyleSheet();
                 stylesPart.Stylesheet.Save();
 
                 var currentSheetIndex = 0;

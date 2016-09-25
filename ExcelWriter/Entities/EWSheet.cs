@@ -32,15 +32,20 @@ namespace ExcelWriter.Entities
             _lastColIndex = col;
             ExcelWriter.CellQueue.Enqueue(new EWCell(row, col, this.Index, styleIndex, value.ToString()));
 
-            
             if (!ExcelWriter.DisableMemoryRestriction)
             {
-                ExcelWriter.GCCollectIfNecessary(); 
+                ExcelWriter.GCCollectIfNecessary();
             }
         }
 
         private string GetStyleIndex(string styleSelector)
         {
+            if (EWStyle.selectors.Count == 0)
+            {
+                //return the default style index;
+                return "0";
+            }
+
             return EWStyle.selectors[styleSelector];
         }
 
@@ -60,7 +65,7 @@ namespace ExcelWriter.Entities
             gap--;
             for (int i = 0; i < gap; i++)
             {
-                
+
             }
         }
 

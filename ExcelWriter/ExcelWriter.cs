@@ -58,10 +58,21 @@ namespace ExcelWriter
 
         #region Styles part
 
-        internal static Stylesheet StyleSheet { get; set; }
+        internal static Stylesheet styleSheet { get; set; }
+
+        internal static Stylesheet GetStyleSheet()
+        {
+            //if there was no applystyles called, create default stylesheet
+            if (styleSheet == null)
+            {
+                return EWStyle.GetStyleSheet(Enumerable.Empty<EWStyle>());
+            }
+            return styleSheet;
+        }
+
         public void ApplyStyles(IEnumerable<EWStyle> styles)
         {
-            StyleSheet = EWStyle.GetStyleSheet(styles);
+            styleSheet = EWStyle.GetStyleSheet(styles);
         }
 
         #endregion
