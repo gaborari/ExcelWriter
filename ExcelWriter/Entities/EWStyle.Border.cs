@@ -1,6 +1,5 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
-using ExcelWriter.Exceptions;
 using ExcelWriter.Helpers;
 using System;
 using System.Collections.Generic;
@@ -12,8 +11,6 @@ namespace ExcelWriter
     {
         private bool _isDefaultBorder = true;
         private bool _isRegisteredBorder = false;
-
-        private Border _oxBorder;
 
         #region Border visibilities
         #region Left border visibility
@@ -320,118 +317,10 @@ namespace ExcelWriter
             TopBorder topborder = null;
             BottomBorder bottomborder = null;
 
-            #region initializing the sides if necessary
-            //if (_leftBorderVisible)
-            //{
-            //    leftborder = new LeftBorder();
-
-            //    #region Setting colours to borders
-            //    if (_leftBorderColour != null)
-            //    {
-            //        leftborder.Color = new Color() { Rgb = new HexBinaryValue() { Value = _leftBorderColour } };
-            //    }
-            //    #endregion
-
-            //    #region Setting styles to borders
-            //    if (_leftBorderStyle != null)
-            //    {
-            //        leftborder.Style = _leftBorderStyle.As<BorderStyleValues>();
-            //    }
-            //    #endregion
-            //}
-
-            //if (_rightBorderVisible)
-            //{
-            //    rightborder = new RightBorder();
-
-            //    #region Setting colours to borders
-            //    if (_rightBorderColour != null)
-            //    {
-            //        rightborder.Color = new Color() { Rgb = new HexBinaryValue() { Value = _rightBorderColour } };
-            //    }
-            //    #endregion
-
-            //    #region Setting styles to borders
-            //    if (_rightBorderStyle != null)
-            //    {
-            //        rightborder.Style = _rightBorderStyle.As<BorderStyleValues>();
-            //    }
-            //    #endregion
-            //}
-
-
-            //if (_topBorderVisible)
-            //{
-            //    topborder = new TopBorder();
-
-            //    #region Setting colours to borders
-            //    if (_topBorderColour != null)
-            //    {
-            //        topborder.Color = new Color() { Rgb = new HexBinaryValue() { Value = _topBorderColour } };
-            //    }
-            //    #endregion
-
-            //    #region Setting styles to borders
-            //    if (_topBorderStyle != null)
-            //    {
-            //        topborder.Style = _topBorderStyle.As<BorderStyleValues>();
-            //    }
-            //    #endregion
-            //}
-
-
-            //if (_bottomBorderVisible)
-            //{
-            //    bottomborder = new BottomBorder();
-
-            //    #region Setting colours to borders
-            //    if (_bottomBorderColour != null)
-            //    {
-            //        bottomborder.Color = new Color() { Rgb = new HexBinaryValue() { Value = _bottomBorderColour } };
-            //    }
-            //    #endregion
-
-            //    #region Setting styles to borders
-            //    if (_bottomBorderStyle != null)
-            //    {
-            //        bottomborder.Style = _bottomBorderStyle.As<BorderStyleValues>();
-            //    }
-            //    #endregion
-            //}
-            #endregion
-
             InitializeBorder(_leftBorderVisible, _leftBorderColour, _leftBorderStyle, leftborder, typeof(LeftBorder));
-            InitializeBorder(_rightBorderVisible, _rightBorderColour, _rightBorderStyle, rightborder, typeof(LeftBorder));
-            InitializeBorder(_topBorderVisible, _topBorderColour, _topBorderStyle, topborder, typeof(LeftBorder));
-            InitializeBorder(_bottomBorderVisible, _bottomBorderColour, _bottomBorderStyle, bottomborder, typeof(LeftBorder));
-
-            var a = leftborder == null;
-            var b = rightborder == null;
-            var c = topborder == null;
-            var d = bottomborder == null;
-
-            #region odl
-            //if (a && b && c && d)     return new Border(leftborder, rightborder, topborder, bottomborder);
-            //if (a && b && c && !d)    return new Border(leftborder, rightborder, topborder);
-
-            //if (a && b && !c && d)    return new Border(leftborder, rightborder, bottomborder);
-            //if (a && b && !c && !d)   return new Border(leftborder, rightborder);
-
-            //if (a && !b && c && d)    return new Border(leftborder, topborder, bottomborder);
-            //if (a && !b && !c && d)   return new Border(leftborder, bottomborder);
-            //if (a && !b && c && !d)   return new Border(leftborder, topborder);
-            //if (a && !b && !c && !d)  return new Border(leftborder);
-
-            //if (!a && b && c && d)    return new Border(rightborder, topborder, bottomborder);
-            //if (!a && b && c && !d)   return new Border(rightborder, topborder);
-            //if (!a && b && !c && d)   return new Border(rightborder, bottomborder);
-            //if (!a && !b && c && d)   return new Border(topborder, bottomborder);
-            //if (!a && b && !c && !d)  return new Border(rightborder, bottomborder);
-            //if (!a && !b && c && !d)  return new Border(topborder);
-            //if (!a && !b && !c && d)  return new Border(bottomborder);
-            //if (!a && !b && !c && !d) return new Border(); 
-            #endregion
-
+            InitializeBorder(_rightBorderVisible, _rightBorderColour, _rightBorderStyle, rightborder, typeof(RightBorder));
+            InitializeBorder(_topBorderVisible, _topBorderColour, _topBorderStyle, topborder, typeof(TopBorder));
+            InitializeBorder(_bottomBorderVisible, _bottomBorderColour, _bottomBorderStyle, bottomborder, typeof(BottomBorder));
             var tempArray = (new List<BorderPropertiesType> {leftborder, rightborder, topborder, bottomborder }).Where(x => x != null).ToArray();
 
             return new Border(tempArray);
