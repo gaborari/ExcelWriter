@@ -78,7 +78,7 @@ namespace ExcelWriter
         public string Name { get; set; }
         public static List<EWSheet> Sheets = new List<EWSheet>();
 
-        Object _lockObj = new object();
+        object _lockObj = new object();
         
         EWConsumer consumer;
         EWThreadKiller threadKiller = new EWThreadKiller();

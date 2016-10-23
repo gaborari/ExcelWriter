@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
+using ExcelWriter.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace ExcelWriter.Entities
         {
             return new Font(                                                               // Index 0 – The default font.
                         new FontSize() { Val = 11 },
-                        new Color() { Rgb = new HexBinaryValue() { Value = "000000" } },
+                        new Color() { Rgb = new HexBinaryValue() { Value = System.Drawing.Color.Black.ToHexString() } },
                         new FontName() { Val = "Calibri" }
                         );
         }
@@ -142,38 +143,38 @@ namespace ExcelWriter.Entities
                 new CellFormats(cellFormatList));
         }
 
-        //TODO remove
-        public static Stylesheet GetBaseStyle()
-        {
-            return new Stylesheet(
-                new Fonts(
-                    GetDefaultFont(),
-                    (new EWFont(11, "Calibri", "000000", isBold: true))._oxFont,
-                    (new EWFont(11, "Calibri", "000000", isItalic: true))._oxFont,
-                    (new EWFont(16, "Times New Roman", "000000"))._oxFont
-                ),
-                new Fills(
-                    GetDefaultFill(),
-                    (new EWFill(EWPattern.Gray125)).oxFill,
-                    (new EWFill(EWPattern.Solid, foreGroundColor: "FFFFFF00")).oxFill            // Index 2 – The yellow fill.
-                ),
-                new Borders(
-                    new EWBorder().GetOpenXmlBorder(),
-                    new EWBorder().GetOpenXmlBorder(),
-                    new EWBorder().GetOpenXmlBorder()
-                ),
-                new CellFormats(
-                    GetDefaultCellFormat(),                          // Index 0 – The default cell style.  If a cell does not have a style index applied it will use this style combination instead
-                    new CellFormat() { FontId = 1, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 1 – Bold 
-                    new CellFormat() { FontId = 2, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 2 – Italic
-                    new CellFormat() { FontId = 3, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 3 – Times Roman
-                    new CellFormat() { FontId = 0, FillId = 2, BorderId = 0, ApplyFill = true },       // Index 4 – Yellow Fill
-                    new CellFormat(                                                                   // Index 5 – Alignment
-                        new Alignment() { Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center }
-                    )
-                    { FontId = 0, FillId = 0, BorderId = 0, ApplyAlignment = true },
-                    new CellFormat() { FontId = 0, FillId = 0, BorderId = 1, ApplyBorder = true }      // Index 6 – Border
-                ));
-        }
+        ////TODO remove
+        //public static Stylesheet GetBaseStyle()
+        //{
+        //    return new Stylesheet(
+        //        new Fonts(
+        //            GetDefaultFont(),
+        //            (new EWFont(11, "Calibri", "000000", isBold: true))._oxFont,
+        //            (new EWFont(11, "Calibri", "000000", isItalic: true))._oxFont,
+        //            (new EWFont(16, "Times New Roman", "000000"))._oxFont
+        //        ),
+        //        new Fills(
+        //            GetDefaultFill(),
+        //            (new EWFill(EWPattern.Gray125)).oxFill,
+        //            (new EWFill(EWPattern.Solid, foreGroundColor: "FFFFFF00")).oxFill            // Index 2 – The yellow fill.
+        //        ),
+        //        new Borders(
+        //            new EWBorder().GetOpenXmlBorder(),
+        //            new EWBorder().GetOpenXmlBorder(),
+        //            new EWBorder().GetOpenXmlBorder()
+        //        ),
+        //        new CellFormats(
+        //            GetDefaultCellFormat(),                          // Index 0 – The default cell style.  If a cell does not have a style index applied it will use this style combination instead
+        //            new CellFormat() { FontId = 1, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 1 – Bold 
+        //            new CellFormat() { FontId = 2, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 2 – Italic
+        //            new CellFormat() { FontId = 3, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 3 – Times Roman
+        //            new CellFormat() { FontId = 0, FillId = 2, BorderId = 0, ApplyFill = true },       // Index 4 – Yellow Fill
+        //            new CellFormat(                                                                   // Index 5 – Alignment
+        //                new Alignment() { Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center }
+        //            )
+        //            { FontId = 0, FillId = 0, BorderId = 0, ApplyAlignment = true },
+        //            new CellFormat() { FontId = 0, FillId = 0, BorderId = 1, ApplyBorder = true }      // Index 6 – Border
+        //        ));
+        //}
     }
 }

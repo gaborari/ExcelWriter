@@ -15,7 +15,7 @@ namespace ExcelWriter.Entities
             }
         }
 
-        public EWFill(EWPattern pattern, string foreGroundColor = null)
+        public EWFill(EWPattern pattern, System.Drawing.Color color, string foreGroundColor = null)
         {
             if (!string.IsNullOrEmpty(foreGroundColor))
             {
@@ -27,9 +27,11 @@ namespace ExcelWriter.Entities
                 return;
             }
 
-            _oxFill = new Fill(                                                           // Index 1 – The default fill of gray 125 (required)
-                        new PatternFill() { PatternType = pattern.As<PatternValues>() }
-                        );
+            _oxFill = new Fill(                                                           // Index 2 – The yellow fill.
+                     new PatternFill(new ForegroundColor() { Rgb = new HexBinaryValue() { Value = "FFFFFF00" } })
+                     {
+                         PatternType = PatternValues.Solid
+                     });
         }
     }
 

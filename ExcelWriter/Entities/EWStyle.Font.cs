@@ -1,5 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
+using ExcelWriter.Helpers;
+
 namespace ExcelWriter.Entities
 {
     public class EWFont
@@ -14,8 +16,10 @@ namespace ExcelWriter.Entities
             }
         }
 
-        public EWFont(double fontSize, string fontName, string fontColor, bool isBold = false, bool isItalic = false)
+        public EWFont(double fontSize, string fontName, System.Drawing.Color color, bool isBold = false, bool isItalic = false)
         {
+            var fontColor = color.ToHexString();
+
             if (isBold && isItalic)
             {
                 _oxFont = new Font(
