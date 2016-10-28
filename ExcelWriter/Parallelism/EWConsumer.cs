@@ -63,7 +63,7 @@ namespace ExcelWriter.Parallelism
                                     attributeList = new List<OpenXmlAttribute>();
                                     // this is the data type ("t"), with CellValues.String ("str")
                                     attributeList.Add(new OpenXmlAttribute("t", null, "str"));
-                                    attributeList.Add(new OpenXmlAttribute("s", null, item.styleIndex));
+                                    attributeList.Add(new OpenXmlAttribute("s", null, (UInt32Value)3U));
 
                                     writer.WriteStartElement(new Cell(), attributeList);
 
