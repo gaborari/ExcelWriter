@@ -33,6 +33,7 @@ namespace ExcelWriter.Entities
             BackgroundColor backgroundColor2 = new BackgroundColor() { Indexed = (UInt32Value)64U };
             patternFill4.Append(foregroundColor2);
             patternFill4.Append(backgroundColor2);
+
             _oxFill.Append(patternFill4);
 
             //_oxFill = new Fill(                                                           // Index 2 – The yellow fill.

@@ -45,6 +45,11 @@ namespace ExcelWriter.Helpers
             return uint.Parse(match.Value);
         }
 
+        internal static uint ToUint(this System.Drawing.Color c)
+        {
+            return (uint)(((c.A << 24) | (c.R << 16) | (c.G << 8) | c.B) & 0xffffffffL);
+        }
+
         public static T As<T>(this EWPattern c) where T : struct
         {
             return (T)System.Enum.Parse(typeof(T), c.ToString(), false);

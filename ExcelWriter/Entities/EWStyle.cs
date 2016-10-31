@@ -143,22 +143,24 @@ namespace ExcelWriter.Entities
             //    selectors.Add(item.Selector, (fontId - 1).ToString());
             //}
 
-            Fonts fonts1 = new Fonts() { Count = (UInt32Value)1U, KnownFonts = true };
+            Fonts fonts1 = new Fonts();
 
-            Font font1 = new Font();
-            FontSize fontSize1 = new FontSize() { Val = 11D };
-            Color color1 = new Color() { Theme = (UInt32Value)1U };
-            FontName fontName1 = new FontName() { Val = "Calibri" };
-            FontFamilyNumbering fontFamilyNumbering1 = new FontFamilyNumbering() { Val = 2 };
-            FontScheme fontScheme1 = new FontScheme() { Val = FontSchemeValues.Minor };
+            foreach (var item in styles)
+            {
+                Font teszt;
 
-            font1.Append(fontSize1);
-            font1.Append(color1);
-            font1.Append(fontName1);
-            font1.Append(fontFamilyNumbering1);
-            font1.Append(fontScheme1);
+                if (item.Font == null)
+                {
+                    teszt = GetDefaultFont();
+                }
+                else
+                {
+                    teszt = item.Font.oxFont;
+                }
 
-            fonts1.Append(font1);
+                fonts1.Append(teszt);
+            }
+             
 
             Fills fills1 = new Fills() { Count = (UInt32Value)5U };
             

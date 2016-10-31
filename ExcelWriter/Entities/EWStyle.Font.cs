@@ -20,49 +20,27 @@ namespace ExcelWriter.Entities
         {
             var fontColor = color.ToHexString();
 
-            if (isBold && isItalic)
-            {
-                _oxFont = new Font(
-                                new Bold(),
-                                new Italic(),
-                                new FontSize() { Val = fontSize },
-                                new Color() { Rgb = new HexBinaryValue() { Value = fontColor } },
-                                new FontName() { Val = fontName }
-                            );
+            _oxFont = new Font();
+            FontSize fontSize1 = new FontSize() { Val = fontSize };
+            _oxFont.Append(fontSize1);
 
-                return;
+            Color color1 = new Color() { Theme = color.ToUint() };
+            _oxFont.Append(color1);
+
+            FontName fontName1 = new FontName() { Val = fontName };
+            _oxFont.Append(fontName1);
+
+            if (isBold == true)
+            {
+                var bold1 = new Bold();
+                _oxFont.Append(bold1);
             }
 
-            if (isBold && !isItalic)
+            if (isItalic == true)
             {
-                _oxFont = new Font(
-                                new Bold(),
-                                new FontSize() { Val = fontSize },
-                                new Color() { Rgb = new HexBinaryValue() { Value = fontColor } },
-                                new FontName() { Val = fontName }
-                            );
-
-                return;
+                var italic1 = new Italic();
+                _oxFont.Append(italic1);
             }
-
-            if (!isBold && isItalic)
-            {
-                _oxFont = new Font(
-                                new Italic(),
-                                new FontSize() { Val = fontSize },
-                                new Color() { Rgb = new HexBinaryValue() { Value = fontColor } },
-                                new FontName() { Val = fontName }
-                            );
-
-                return;
-            }
-
-            _oxFont = new Font
-            (
-                new FontSize() { Val = fontSize },
-                new Color() { Rgb = new HexBinaryValue() { Value = fontColor } },
-                new FontName() { Val = fontName }
-            );
             
         }
     }
