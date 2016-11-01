@@ -143,27 +143,14 @@ namespace ExcelWriter.Entities
             //    selectors.Add(item.Selector, (fontId - 1).ToString());
             //}
 
-            Fonts fonts1 = new Fonts();
+            Fonts fonts1 = new Fonts() { Count = (UInt32Value)2U};
+            Fills fills1 = new Fills();
+            CellFormats cellFormats1 = new CellFormats();
 
-            foreach (var item in styles)
-            {
-                Font teszt;
+            //Add default font 
+            fonts1.Append(GetDefaultFont());
+            CellFormat cellFormat2 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)1U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, ApplyFill = true };
 
-                if (item.Font == null)
-                {
-                    teszt = GetDefaultFont();
-                }
-                else
-                {
-                    teszt = item.Font.oxFont;
-                }
-
-                fonts1.Append(teszt);
-            }
-             
-
-            Fills fills1 = new Fills() { Count = (UInt32Value)5U };
-            
             // FillId = 0
             Fill fill1 = new Fill();
             PatternFill patternFill1 = new PatternFill() { PatternType = PatternValues.None };
@@ -174,39 +161,31 @@ namespace ExcelWriter.Entities
             PatternFill patternFill2 = new PatternFill() { PatternType = PatternValues.Gray125 };
             fill2.Append(patternFill2);
 
-            // FillId = 2,RED
-            Fill fill3 = new Fill();
-            PatternFill patternFill3 = new PatternFill() { PatternType = PatternValues.Solid };
-            ForegroundColor foregroundColor1 = new ForegroundColor() { Rgb = "FFFF0000" };
-            BackgroundColor backgroundColor1 = new BackgroundColor() { Indexed = (UInt32Value)64U };
-            patternFill3.Append(foregroundColor1);
-            patternFill3.Append(backgroundColor1);
-            fill3.Append(patternFill3);
-
-            // FillId = 3,BLUE
-            Fill fill4 = new Fill();
-            PatternFill patternFill4 = new PatternFill() { PatternType = PatternValues.Solid };
-            ForegroundColor foregroundColor2 = new ForegroundColor() { Rgb = "FF0070C0" };
-            BackgroundColor backgroundColor2 = new BackgroundColor() { Indexed = (UInt32Value)64U };
-            patternFill4.Append(foregroundColor2);
-            patternFill4.Append(backgroundColor2);
-            fill4.Append(patternFill4);
-
-            // FillId = 4,YELLO
-            Fill fill5 = new Fill();
-            PatternFill patternFill5 = new PatternFill() { PatternType = PatternValues.Solid };
-            ForegroundColor foregroundColor3 = new ForegroundColor() { Rgb = "FFFFFF00" };
-            BackgroundColor backgroundColor3 = new BackgroundColor() { Indexed = (UInt32Value)64U };
-            patternFill5.Append(foregroundColor3);
-            patternFill5.Append(backgroundColor3);
-            fill5.Append(patternFill5);
-
             fills1.Append(fill1);
             fills1.Append(fill2);
-            fills1.Append(fill3);
-            fills1.Append(fill4);
-            fills1.Append(fill5);
 
+            foreach (var item in styles)
+            {
+                Font font;
+
+                if (item.Font == null)
+                {
+                    font = GetDefaultFont();
+                }
+                else
+                {
+                    font = item.Font.oxFont;
+
+                }
+                fonts1.Append(font);
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                
+                fills1.Append(item.Fill.oxFill);
+
+            }
+
+            #region border
             Borders borders1 = new Borders() { Count = (UInt32Value)1U };
 
             Border border1 = new Border();
@@ -222,34 +201,21 @@ namespace ExcelWriter.Entities
             border1.Append(bottomBorder1);
             border1.Append(diagonalBorder1);
 
-            borders1.Append(border1);
+            borders1.Append(border1); 
+            #endregion
 
-            CellStyleFormats cellStyleFormats1 = new CellStyleFormats() { Count = (UInt32Value)1U };
-            CellFormat cellFormat1 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U };
-
-            cellStyleFormats1.Append(cellFormat1);
-
-            CellFormats cellFormats1 = new CellFormats() { Count = (UInt32Value)4U };
-            CellFormat cellFormat2 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U };
-            CellFormat cellFormat3 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)2U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFill = true };
-            CellFormat cellFormat4 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)3U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFill = true };
-            CellFormat cellFormat5 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)4U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFill = true };
+           
+            CellFormat cellFormat3 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)1U, FillId = (UInt32Value)2U, BorderId = (UInt32Value)0U, ApplyFill = true };
 
             cellFormats1.Append(cellFormat2);
             cellFormats1.Append(cellFormat3);
-            cellFormats1.Append(cellFormat4);
-            cellFormats1.Append(cellFormat5);
-
-            CellStyles cellStyles1 = new CellStyles() { Count = (UInt32Value)1U };
-            CellStyle cellStyle1 = new CellStyle() { Name = "Normal", FormatId = (UInt32Value)0U, BuiltinId = (UInt32Value)0U };
-
 
             return new Stylesheet(
-                    fonts1,
-                    fills1,
-                    borders1,
-                    cellFormats1
-                );
+                   fonts1,
+                   fills1,
+                   borders1,
+                   cellFormats1
+               );
         }
 
         ////TODO remove

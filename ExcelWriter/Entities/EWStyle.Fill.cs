@@ -17,31 +17,12 @@ namespace ExcelWriter.Entities
 
         public EWFill(EWPattern pattern, System.Drawing.Color color, string foreGroundColor = null)
         {
-            if (!string.IsNullOrEmpty(foreGroundColor))
-            {
-                _oxFill = new Fill(                                                           // Index 2 – The yellow fill.
-                            new PatternFill(
-                                new ForegroundColor() { Rgb = new HexBinaryValue() { Value = foreGroundColor } }
-                            ) { PatternType = pattern.As<PatternValues>() }
-                        );
-                return;
-            }
-
             _oxFill = new Fill();
-            PatternFill patternFill4 = new PatternFill() { PatternType = PatternValues.Solid };
-            ForegroundColor foregroundColor2 = new ForegroundColor() { Rgb = "FF0070C0" };
-            BackgroundColor backgroundColor2 = new BackgroundColor() { Indexed = (UInt32Value)64U };
-            patternFill4.Append(foregroundColor2);
-            patternFill4.Append(backgroundColor2);
 
-            _oxFill.Append(patternFill4);
-
-            //_oxFill = new Fill(                                                           // Index 2 – The yellow fill.
-            //         new PatternFill(new ForegroundColor() { Rgb = new HexBinaryValue() { Value = "FFFFFF00" } })
-            //         {
-            //             PatternType = PatternValues.Solid,
-            //             BackgroundColor = new BackgroundColor { Rgb = new HexBinaryValue() { Value = "FFFFFF00" } }
-            //         });
+            PatternFill patternFill = new PatternFill() { PatternType = pattern.As<PatternValues>() };
+            BackgroundColor backgroundColor = new BackgroundColor() { Rgb = color.ToHexString() };
+            _oxFill.Append(backgroundColor);
+            _oxFill.Append(patternFill);
         }
     }
 

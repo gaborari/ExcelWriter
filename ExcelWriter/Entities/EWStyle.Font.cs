@@ -24,9 +24,8 @@ namespace ExcelWriter.Entities
             FontSize fontSize1 = new FontSize() { Val = fontSize };
             _oxFont.Append(fontSize1);
 
-            Color color1 = new Color() { Theme = color.ToUint() };
+            Color color1 = new Color() { Rgb = color.ToHexString() };
             _oxFont.Append(color1);
-
             FontName fontName1 = new FontName() { Val = fontName };
             _oxFont.Append(fontName1);
 
