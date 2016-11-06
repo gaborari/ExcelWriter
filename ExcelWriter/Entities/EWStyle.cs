@@ -103,46 +103,7 @@ namespace ExcelWriter.Entities
 
             UInt32 borderId, fillId, fontId;
             borderId = fillId = fontId = 0;
-            //foreach (var item in styles)
-            //{
-            //    if (item.Font == null)
-            //    {
-            //        fontList.Add(GetDefaultFont());
-            //    }
-            //    else
-            //    {
-            //        fontList.Add(item.Font.oxFont);
-            //    }
-
-            //    if (item.Fill == null)
-            //    {
-            //        fillList.Add(GetDefaultFill());
-            //    }
-            //    else
-            //    {
-            //        fillList.Add(item.Fill.oxFill);
-            //    }
-
-            //    if (item.Border == null)
-            //    {
-            //        borderList.Add(new EWBorder().GetOpenXmlBorder());
-            //    }
-            //    else
-            //    {
-            //        borderList.Add(item.Border.GetOpenXmlBorder());
-            //    }
-
-            //    CellFormat cellFormat2 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U };
-            //    CellFormat cellFormat3 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)2U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFill = true };
-            //    CellFormat cellFormat4 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)3U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFill = true };
-            //    CellFormat cellFormat5 = new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)4U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFill = true };
-
-
-            //    cellFormatList.Add(new CellFormat() { FontId = fontId++, FillId = fillId++, BorderId = borderId++, ApplyFill = true });
-
-            //    selectors.Add(item.Selector, (fontId - 1).ToString());
-            //}
-
+            
             Fonts fonts1 = new Fonts() { Count = (UInt32Value)2U};
             Fills fills1 = new Fills();
             CellFormats cellFormats1 = new CellFormats();
@@ -178,7 +139,7 @@ namespace ExcelWriter.Entities
 
                 }
                 fonts1.Append(font);
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                ////////////////
 
                 
                 fills1.Append(item.Fill.oxFill);
@@ -218,38 +179,5 @@ namespace ExcelWriter.Entities
                );
         }
 
-        ////TODO remove
-        //public static Stylesheet GetBaseStyle()
-        //{
-        //    return new Stylesheet(
-        //        new Fonts(
-        //            GetDefaultFont(),
-        //            (new EWFont(11, "Calibri", "000000", isBold: true))._oxFont,
-        //            (new EWFont(11, "Calibri", "000000", isItalic: true))._oxFont,
-        //            (new EWFont(16, "Times New Roman", "000000"))._oxFont
-        //        ),
-        //        new Fills(
-        //            GetDefaultFill(),
-        //            (new EWFill(EWPattern.Gray125)).oxFill,
-        //            (new EWFill(EWPattern.Solid, foreGroundColor: "FFFFFF00")).oxFill            // Index 2 – The yellow fill.
-        //        ),
-        //        new Borders(
-        //            new EWBorder().GetOpenXmlBorder(),
-        //            new EWBorder().GetOpenXmlBorder(),
-        //            new EWBorder().GetOpenXmlBorder()
-        //        ),
-        //        new CellFormats(
-        //            GetDefaultCellFormat(),                          // Index 0 – The default cell style.  If a cell does not have a style index applied it will use this style combination instead
-        //            new CellFormat() { FontId = 1, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 1 – Bold 
-        //            new CellFormat() { FontId = 2, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 2 – Italic
-        //            new CellFormat() { FontId = 3, FillId = 0, BorderId = 0, ApplyFont = true },       // Index 3 – Times Roman
-        //            new CellFormat() { FontId = 0, FillId = 2, BorderId = 0, ApplyFill = true },       // Index 4 – Yellow Fill
-        //            new CellFormat(                                                                   // Index 5 – Alignment
-        //                new Alignment() { Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center }
-        //            )
-        //            { FontId = 0, FillId = 0, BorderId = 0, ApplyAlignment = true },
-        //            new CellFormat() { FontId = 0, FillId = 0, BorderId = 1, ApplyBorder = true }      // Index 6 – Border
-        //        ));
-        //}
     }
 }
