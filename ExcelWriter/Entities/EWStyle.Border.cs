@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace ExcelWriter
 {
+    //TODO Humongous refactor
     public class EWBorder 
     {
         private bool _isDefaultBorder = true;
@@ -312,18 +313,20 @@ namespace ExcelWriter
                         new DiagonalBorder());
             }
 
-            LeftBorder leftborder = null;
-            RightBorder rightborder = null;
-            TopBorder topborder = null;
-            BottomBorder bottomborder = null;
+            Border border1 = new Border();
+            LeftBorder leftBorder1 = new LeftBorder();
+            RightBorder rightBorder1 = new RightBorder();
+            TopBorder topBorder1 = new TopBorder();
+            BottomBorder bottomBorder1 = new BottomBorder();
+            DiagonalBorder diagonalBorder1 = new DiagonalBorder();
 
-            InitializeBorder(_leftBorderVisible, _leftBorderColour, _leftBorderStyle, leftborder, typeof(LeftBorder));
-            InitializeBorder(_rightBorderVisible, _rightBorderColour, _rightBorderStyle, rightborder, typeof(RightBorder));
-            InitializeBorder(_topBorderVisible, _topBorderColour, _topBorderStyle, topborder, typeof(TopBorder));
-            InitializeBorder(_bottomBorderVisible, _bottomBorderColour, _bottomBorderStyle, bottomborder, typeof(BottomBorder));
-            var tempArray = (new List<BorderPropertiesType> {leftborder, rightborder, topborder, bottomborder }).Where(x => x != null).ToArray();
+            border1.Append(leftBorder1);
+            border1.Append(rightBorder1);
+            border1.Append(topBorder1);
+            border1.Append(bottomBorder1);
+            border1.Append(diagonalBorder1);
 
-            return new Border(tempArray);
+            return border1;
         }
 
         private void InitializeBorder(bool isVisible, string borderColour, Borderstyles? style, BorderPropertiesType border, Type borderType)
@@ -347,8 +350,29 @@ namespace ExcelWriter
                 #endregion
             }
         }
-    }
 
+        internal Border oxBorder
+        {
+            get
+            {
+                Border border1 = new Border();
+                LeftBorder leftBorder1 = new LeftBorder();
+                RightBorder rightBorder1 = new RightBorder();
+                TopBorder topBorder1 = new TopBorder();
+                BottomBorder bottomBorder1 = new BottomBorder();
+                DiagonalBorder diagonalBorder1 = new DiagonalBorder();
+
+                border1.Append(leftBorder1);
+                border1.Append(rightBorder1);
+                border1.Append(topBorder1);
+                border1.Append(bottomBorder1);
+                border1.Append(diagonalBorder1);
+
+                return border1;
+            }
+        }
+    }
+    
     public enum Borderstyles
     {
         None = 0,

@@ -7,13 +7,24 @@
         internal int columnIndex;
         internal string value;
         internal string styleIndex;
-        public EWCell(int rowIndex, int columnIndex, int sheetIndex, string styleIndex, string value)
+        internal string cellType;
+        public EWCell(int rowIndex, int columnIndex, int sheetIndex, string styleIndex, string value, string cellType)
         {
             this.rowIndex = rowIndex;
             this.columnIndex = columnIndex;
             this.value = value;
             this.sheetIndex = sheetIndex;
             this.styleIndex = styleIndex;
+            this.cellType = cellType;
         }
+    }
+
+    public enum CellType
+    {
+        General = 0,
+        Numeric = 1,
+        Date = 2,
+        DateTime = 3,
+        String = 4
     }
 }

@@ -68,7 +68,12 @@ namespace ExcelWriter
             return styleSheet;
         }
 
-        public void ApplyStyles(IEnumerable<EWStyle> styles)
+        //public void ApplyStyles(IEnumerable<EWStyle> styles)
+        //{
+        //    styleSheet = EWStyle.GetStyleSheet(styles);
+        //}
+
+        public void ApplyStyles(params EWStyle[] styles)
         {
             styleSheet = EWStyle.GetStyleSheet(styles);
         }

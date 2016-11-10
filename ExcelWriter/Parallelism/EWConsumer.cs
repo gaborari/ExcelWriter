@@ -62,12 +62,10 @@ namespace ExcelWriter.Parallelism
                                 {
                                     attributeList = new List<OpenXmlAttribute>();
                                     // this is the data type ("t"), with CellValues.String ("str")
-                                    attributeList.Add(new OpenXmlAttribute("t", null, "str"));
-                                    //attributeList.Add(new OpenXmlAttribute("s", null, (UInt32Value)1U));
-                                    attributeList.Add(new OpenXmlAttribute("s", null, "1"));
+                                    attributeList.Add(new OpenXmlAttribute("t", null, item.cellType));
+                                    attributeList.Add(new OpenXmlAttribute("s", null, item.styleIndex));
 
                                     writer.WriteStartElement(new Cell(), attributeList);
-
                                     writer.WriteElement(new CellValue(item.value));
 
                                     // this is for Cell
@@ -130,8 +128,6 @@ namespace ExcelWriter.Parallelism
 
                 spreadSheet.Close();
             }
-
-
         }
     }
 }

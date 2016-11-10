@@ -10,6 +10,16 @@ namespace ExcelWriter.Helpers
     internal static class Extensions
     {
 
+        public static bool IsNotNullAndNotEmpty<T>(this IEnumerable<T> collection)
+        {
+            return collection != null && collection.Any();
+        }
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> collection)
+        {
+            return collection == null || !collection.Any();
+        }
+
         /// <summary>
         /// Get the column name from an int number
         /// </summary>

@@ -6,7 +6,7 @@
         internal int Index { get; set; }
         private int _lastRowIndex { get; set; }
         private int _lastColIndex { get; set; }
-        public void AddCell(int row, int col, string styleSelector, object value)
+        public void AddCell(int row, int col, string styleSelector, object value, CellType cellType = CellType.General)
         {
             //Only sequential writing is possible
             if (row < _lastRowIndex)
@@ -23,11 +23,30 @@
 
             _lastRowIndex = row;
             _lastColIndex = col;
-            ExcelWriter.CellQueue.Enqueue(new EWCell(row, col, this.Index, styleIndex, value.ToString()));
+            ExcelWriter.CellQueue.Enqueue(new EWCell(row, col, this.Index, styleIndex, value.ToString(), "str"));
 
             if (!ExcelWriter.DisableMemoryRestriction)
             {
                 ExcelWriter.GCCollectIfNecessary();
+            }
+        }
+
+        //TODO Handle properly
+        private static string GetType(CellType cellType)
+        {
+            switch (cellType)
+            {
+                
+                case CellType.Numeric:
+                    return "str";
+                case CellType.Date:
+                    return "str";
+                case CellType.DateTime:
+                    return "str";
+                case CellType.General:
+                case CellType.String:
+                default:
+                    return "str";
             }
         }
 

@@ -15,14 +15,17 @@ namespace ExcelWriter.Entities
             }
         }
 
-        public EWFill(EWPattern pattern, System.Drawing.Color color, string foreGroundColor = null)
+        public EWFill(System.Drawing.Color color, EWPattern pattern = EWPattern.Solid)
         {
             _oxFill = new Fill();
 
-            PatternFill patternFill = new PatternFill() { PatternType = pattern.As<PatternValues>() };
-            BackgroundColor backgroundColor = new BackgroundColor() { Rgb = color.ToHexString() };
-            _oxFill.Append(backgroundColor);
-            _oxFill.Append(patternFill);
+            PatternFill patternFill3 = new PatternFill() { PatternType = pattern.As<PatternValues>() };
+            ForegroundColor foregroundColor1 = new ForegroundColor() { Rgb = color.ToHexString() };
+            //BackgroundColor backgroundColor1 = new BackgroundColor() { Indexed = (UInt32Value)64U };
+            patternFill3.Append(foregroundColor1);
+            //patternFill3.Append(backgroundColor1);
+            _oxFill.Append(patternFill3);
+
         }
     }
 
