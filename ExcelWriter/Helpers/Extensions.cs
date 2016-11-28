@@ -70,6 +70,11 @@ namespace ExcelWriter.Helpers
             return (T)System.Enum.Parse(typeof(T), c.ToString(), false);
         }
 
+        public static T As<T>(this Borderstyles c) where T : struct
+        {
+            return (T)System.Enum.Parse(typeof(T), c.ToString(), false);
+        }
+
         public static string ToHexString(this System.Drawing.Color color)
         {
             return color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");

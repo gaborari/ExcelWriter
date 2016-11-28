@@ -12,6 +12,9 @@ namespace ExcelWriter.Entities
         public EWBorder Border { get; set; }
         public EWFont Font { get; set; }
         public EWFill Fill { get; set; }
+
+        public EWBorder2 Border2 { get; set; }
+
         public string Selector { get; set; }
 
         internal static Dictionary<string, string> selectors { get; set; } = new Dictionary<string, string>();
@@ -88,6 +91,34 @@ namespace ExcelWriter.Entities
             BottomBorder bottomBorder1 = new BottomBorder();
             DiagonalBorder diagonalBorder1 = new DiagonalBorder();
 
+            border1.Append(leftBorder1);
+            border1.Append(rightBorder1);
+            border1.Append(topBorder1);
+            border1.Append(bottomBorder1);
+            border1.Append(diagonalBorder1);
+
+            return border1;
+        }
+
+        public static Border GetDefaultBorder2()
+        {
+            Border border1 = new Border() { Outline = true};
+            LeftBorder leftBorder1 = new LeftBorder() { Style = BorderStyleValues.Thin };
+            leftBorder1.Append(new Color() { Rgb = new HexBinaryValue() { Value = System.Drawing.Color.Red.ToHexString() } });
+            RightBorder rightBorder1 = new RightBorder() { Style = BorderStyleValues.Thin };
+            rightBorder1.Append(new Color() { Rgb = new HexBinaryValue() { Value = System.Drawing.Color.Red.ToHexString() } });
+
+
+            TopBorder topBorder1 = new TopBorder() { Style = BorderStyleValues.Thin };
+            topBorder1.Append(new Color() { Rgb = new HexBinaryValue() { Value = System.Drawing.Color.Red.ToHexString() } });
+
+            BottomBorder bottomBorder1 = new BottomBorder() { Style = BorderStyleValues.Thin };
+            bottomBorder1.Append(new Color() { Rgb = new HexBinaryValue() { Value = System.Drawing.Color.Red.ToHexString() } });
+
+            DiagonalBorder diagonalBorder1 = new DiagonalBorder() { Style = BorderStyleValues.Thin};
+            diagonalBorder1.Append(new Color() { Rgb = new HexBinaryValue() { Value = System.Drawing.Color.Red.ToHexString() } });
+
+            //Sort order is very very very important
             border1.Append(leftBorder1);
             border1.Append(rightBorder1);
             border1.Append(topBorder1);
@@ -190,18 +221,15 @@ namespace ExcelWriter.Entities
 
                 #region Border Add
 
-                Border border;
 
-                if (item.Border == null)
+                if (item.Border2 != null)
                 {
-                    border = GetDefaultBorder();
+                    borders1.Append(item.Border2.oxBorder);
                 }
                 else
                 {
-                    border = item.Border.oxBorder;
+                    borders1.Append(GetDefaultBorder());
                 }
-
-                borders1.Append(border);
 
                 #endregion
 
@@ -212,7 +240,7 @@ namespace ExcelWriter.Entities
                     NumberFormatId = (UInt32Value)0U,
                     FontId = UInt32Value.FromUInt32((uint)(iterationCount + 1)),
                     FillId = UInt32Value.FromUInt32((uint)(iterationCount + 2)),
-                    BorderId = UInt32Value.FromUInt32((uint)(iterationCount + 1)),
+                    BorderId = UInt32Value.FromUInt32((uint)(iterationCount == 0 ? 1 : iterationCount + 1)),
                     ApplyFill = true,
                     ApplyBorder = true
                 };
