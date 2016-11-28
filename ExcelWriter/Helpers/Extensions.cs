@@ -10,6 +10,26 @@ namespace ExcelWriter.Helpers
     internal static class Extensions
     {
 
+        /// <summary>
+        /// Creates the distinct version of the source list based on the given selector
+        /// </summary>
+        /// <typeparam name="TSource">The type of source</typeparam>
+        /// <typeparam name="TKey">The type of key</typeparam>
+        /// <param name="source">The source list</param>
+        /// <param name="keySelector">The selector of distinction</param>
+        /// <returns></returns>
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
+        }
+
         public static bool IsNotNullAndNotEmpty<T>(this IEnumerable<T> collection)
         {
             return collection != null && collection.Any();
