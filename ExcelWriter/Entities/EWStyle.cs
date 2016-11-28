@@ -9,11 +9,10 @@ namespace ExcelWriter.Entities
 {
     public partial class EWStyle
     {
-        public EWBorder Border { get; set; }
         public EWFont Font { get; set; }
         public EWFill Fill { get; set; }
 
-        public EWBorder2 Border2 { get; set; }
+        public EWBorder Border2 { get; set; }
 
         public string Selector { get; set; }
 
@@ -51,11 +50,7 @@ namespace ExcelWriter.Entities
         {
             get
             {
-                if (_defaultBorder == null)
-                {
-                    _defaultBorder = new EWBorder().GetOpenXmlBorder();
-                }
-                return _defaultBorder;
+                return GetDefaultBorder();
             }
         }
 

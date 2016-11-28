@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\EWCell.cs" />
+    <Compile Include="Entities\EWColor.cs" />
     <Compile Include="Entities\EWMergedCell.cs" />
     <Compile Include="Entities\EWSheet.cs" />
     <Compile Include="Entities\EWStyle.cs" />
